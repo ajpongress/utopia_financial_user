@@ -1,0 +1,3 @@
+User,CardModel,Year,Month,Day,Time,Amount,Use Chip,Merchant Name,Merchant City,Merchant State,Zip,MCC,Errors?,Is Fraud?
+0,0,2002,9,1,06:21,$134.09,Swipe Transaction,-3527213246127876953,La Verne,CA,91750.0,5300,,No
+2,0,2009,9,26,01:56,$948.44,Online Transaction,3694722044710185708, ONLINE,,,4722,,No
