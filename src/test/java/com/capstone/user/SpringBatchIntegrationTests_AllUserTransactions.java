@@ -1,8 +1,14 @@
 package com.capstone.user;
 
+// ********************************************************************************
+//                          Test All Users Operations
+// ********************************************************************************
+
 import com.capstone.user.Classifiers.UserTransactionClassifier;
+import com.capstone.user.Configurations.BatchConfigAllUsers;
 import com.capstone.user.Configurations.BatchConfigSingleUser;
 import com.capstone.user.Models.UserTransactionModel;
+import com.capstone.user.Processors.AllUsersProcessor;
 import com.capstone.user.Processors.SingleUserProcessor;
 import com.capstone.user.Readers.UserTransactionReaderCSV;
 import com.capstone.user.TaskExecutors.TaskExecutor;
@@ -21,23 +27,19 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.io.File;
 
-// ********************************************************************************
-//                          Test Single User Operations
-// ********************************************************************************
-
 @SpringBatchTest
 @SpringJUnitConfig(classes = {
-        BatchConfigSingleUser.class,
+        BatchConfigAllUsers.class,
         UserTransactionClassifier.class,
         UserTransactionModel.class,
         UserTransactionReaderCSV.class,
-        SingleUserProcessor.class,
+        AllUsersProcessor.class,
         UserTransactionCompositeWriter.class,
         TaskExecutor.class
 })
 @EnableAutoConfiguration
 
-public class SpringBatchIntegrationTests_SingleUserTransaction {
+public class SpringBatchIntegrationTests_AllUserTransactions {
 
     // ----------------------------------------------------------------------------------
     // --                                  SETUP                                       --
@@ -49,51 +51,51 @@ public class SpringBatchIntegrationTests_SingleUserTransaction {
     @Autowired
     private JobRepositoryTestUtils jobRepositoryTestUtils;
 
-    // Set userID to test for single user operations & export
-    private long userID = 2;
-    private String INPUT = "src/test/resources/input/test_input.csv";
-    private String EXPECTED_OUTPUT = "src/test/resources/output/expected_output_SingleUserTransaction.xml";
-    private String ACTUAL_OUTPUT = "src/test/resources/output/user_" + userID;
+    // Hardcoded userID - matches first userID in test_input.csv source
+    private long userID_first = 0;
 
-//    @BeforeEach
-//    public void setup(@Autowired Job job_singleUser) {
-//        jobLauncherTestUtils.setJob(job_singleUser);
-//    }
+    // Hardcoded userID - matches second userID in test_input.csv source
+    private long userID_second = 2;
+
+    private String INPUT = "src/test/resources/input/test_input.csv";
+    private String EXPECTED_OUTPUT_1 = "src/test/resources/output/expected_output_AllUsersTransaction_1.xml";
+    private String EXPECTED_OUTPUT_2 = "src/test/resources/output/expected_output_AllUsersTransaction_2.xml";
+    private String ACTUAL_OUTPUT = "src/test/resources/output/users";
 
     @AfterEach
     public void cleanUp() {
         jobRepositoryTestUtils.removeJobExecutions();
     }
 
-    private JobParameters testJobParameters_SingleUser() {
+    private JobParameters testJobParameters_AllUsers() {
 
         return new JobParametersBuilder()
-                .addLong("userID_param", userID)
                 .addString("file.input", INPUT)
                 .addString("outputPath_param", ACTUAL_OUTPUT)
                 .toJobParameters();
     }
-
 
     // ----------------------------------------------------------------------------------
     // --                                 TESTS                                        --
     // ----------------------------------------------------------------------------------
 
     @Test
-    public void testBatchProcessFor_SingleUser() throws Exception {
+    public void testBatchProcessFor_AllUsers() throws Exception {
 
         // Load job parameters and launch job through test suite
-        JobExecution jobExecution = jobLauncherTestUtils.launchJob(testJobParameters_SingleUser());
+        JobExecution jobExecution = jobLauncherTestUtils.launchJob(testJobParameters_AllUsers());
         JobInstance actualJobInstance = jobExecution.getJobInstance();
         ExitStatus actualJobExitStatus = jobExecution.getExitStatus();
 
         // ----- Assertions -----
         File testInputFile = new File(INPUT);
-        File testOutputFileExpected = new File(EXPECTED_OUTPUT);
-        File testOutputFileActual = new File(ACTUAL_OUTPUT + "/user_" + userID + "_transactions.xml");
+        File testOutputFileExpected_1 = new File(EXPECTED_OUTPUT_1);
+        File testOutputFileExpected_2 = new File(EXPECTED_OUTPUT_2);
+        File testOutputFileActual_1 = new File(ACTUAL_OUTPUT + "/user_" + userID_first + "_transactions.xml");
+        File testOutputFileActual_2 = new File(ACTUAL_OUTPUT + "/user_" + userID_second + "_transactions.xml");
 
         // Match job names
-        Assertions.assertEquals("singleUserJob", actualJobInstance.getJobName());
+        Assertions.assertEquals("allUsersJob", actualJobInstance.getJobName());
 
         // Match job exit status to "COMPLETED"
         Assertions.assertEquals("COMPLETED", actualJobExitStatus.getExitCode());
@@ -101,12 +103,16 @@ public class SpringBatchIntegrationTests_SingleUserTransaction {
         // Verify input file is valid and can be read
         Assertions.assertTrue(FileUtil.canReadFile(testInputFile));
 
-        // Verify output (expected) file is valid and can be read
-        Assertions.assertTrue(FileUtil.canReadFile(testOutputFileExpected));
+        // Verify output (expected) file 1 is valid and can be read
+        Assertions.assertTrue(FileUtil.canReadFile(testOutputFileExpected_1));
 
-        // Verify output (actual) file is valid and can be read
-        Assertions.assertTrue(FileUtil.canReadFile(testOutputFileActual));
+        // Verify output (expected) file 2 is valid and can be read
+        Assertions.assertTrue(FileUtil.canReadFile(testOutputFileExpected_2));
 
+        // Verify output (actual) file 1 is valid and can be read
+        Assertions.assertTrue(FileUtil.canReadFile(testOutputFileActual_1));
+
+        // Verify output (actual) file 2 is valid and can be read
+        Assertions.assertTrue(FileUtil.canReadFile(testOutputFileActual_2));
     }
 }
-
