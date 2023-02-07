@@ -13,7 +13,10 @@ class UserApplicationTests {
     void contextLoads() {
     }
 
-    // Model testing
+    // ----------------------------------------------------------------------------------
+    // --                             MODEL TESTING                                    --
+    // ----------------------------------------------------------------------------------
+
     @Test
     public void creates_transaction_id_1_userid_99_firstname_Bob_lastname_Smith_email_bobdotsmithatsmoothceeplusplus_cardid_88_year_2023_month_3_day_7_time_1130_amount_101_11_type_swipe_transaction_merchantid_777777777_city_Chicago_state_IL_zip_60602_merchantcode_5555_error_no_fraud_no () throws ClassNotFoundException {
 
