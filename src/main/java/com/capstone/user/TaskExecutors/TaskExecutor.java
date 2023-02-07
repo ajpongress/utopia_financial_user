@@ -11,7 +11,7 @@ public class TaskExecutor {
     int corePoolSize = Runtime.getRuntime().availableProcessors();
 
     // Multithreading taskExecutor (using SimpleAsyncTaskExecutor)
-    @Bean
+    @Bean("taskExecutor_User")
     public org.springframework.core.task.TaskExecutor asyncTaskExecutor() {
 
         SimpleAsyncTaskExecutor simpleAsyncTaskExecutor = new SimpleAsyncTaskExecutor();

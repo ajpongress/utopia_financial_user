@@ -43,7 +43,8 @@ public class BatchConfigAllUsers {
     private ClassifierCompositeItemWriter<UserTransactionModel> classifierCompositeItemWriter;
 
     @Autowired
-    private TaskExecutor taskExecutor;
+    @Qualifier("taskExecutor_User")
+    private org.springframework.core.task.TaskExecutor asyncTaskExecutor;
 
     @Autowired
     private UserTransactionClassifier userTransactionClassifier;
@@ -71,7 +72,7 @@ public class BatchConfigAllUsers {
                         return StepExecutionListener.super.afterStep(stepExecution);
                     }
                 })
-                .taskExecutor(taskExecutor)
+                .taskExecutor(asyncTaskExecutor)
                 .build();
     }
 
