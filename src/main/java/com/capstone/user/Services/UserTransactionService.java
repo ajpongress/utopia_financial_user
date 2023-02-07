@@ -9,12 +9,14 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.batch.item.ItemStreamException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.NoSuchElementException;
 
 @Service
@@ -34,6 +36,12 @@ public class UserTransactionService {
     BatchConfigSingleUser batchConfigSingleUser;
 
     private JobParameters buildJobParameters_AllUsers(String pathInput, String pathOutput) {
+
+        // Check if source file.input is valid
+        File file = new File(pathInput);
+        if (!file.exists()) {
+            throw new ItemStreamException("Requested source doesn't exist");
+        }
 
         return new JobParametersBuilder()
                 .addString("file.input", pathInput)
