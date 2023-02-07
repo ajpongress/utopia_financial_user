@@ -51,6 +51,12 @@ public class UserTransactionService {
 
     private JobParameters buildJobParameters_SingleUser(long userID, String pathInput, String pathOutput) {
 
+        // Check if source file.input is valid
+        File file = new File(pathInput);
+        if (!file.exists()) {
+            throw new ItemStreamException("Requested source doesn't exist");
+        }
+
         return new JobParametersBuilder()
                 .addLong("userID_param", userID)
                 .addString("file.input", pathInput)
