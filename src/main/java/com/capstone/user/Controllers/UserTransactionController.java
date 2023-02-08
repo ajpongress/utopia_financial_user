@@ -41,4 +41,11 @@ public class UserTransactionController {
         //userID = Math.abs(userID); // Comment for DEMO!!!!!
         return transactionServiceUser.singleUser(userID, source, destination);
     }
+
+    // check for insufficient balance at least once per user
+    @GetMapping("/users/balance_error_once")
+    public ResponseEntity<String> balanceErrorOnceAPI(@RequestParam String source, @RequestParam String destination) {
+
+        return transactionServiceUser.balanceErrorOnce(source, destination);
+    }
 }

@@ -1,9 +1,5 @@
 package com.capstone.user;
 
-// ********************************************************************************
-//                          Test All Users Operations
-// ********************************************************************************
-
 import com.capstone.user.Classifiers.UserTransactionClassifier;
 import com.capstone.user.Configurations.BatchConfigAllUsers;
 import com.capstone.user.Models.UserTransactionModel;
@@ -24,6 +20,10 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.io.File;
+
+// ********************************************************************************
+//                          Test All Users Operations
+// ********************************************************************************
 
 @SpringBatchTest
 @SpringJUnitConfig(classes = {
