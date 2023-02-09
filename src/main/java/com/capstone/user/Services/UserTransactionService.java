@@ -77,6 +77,8 @@ public class UserTransactionService {
         }
 
         return new JobParametersBuilder()
+                //.addLong("total_users", 0L)
+                //.addLong("usercount_with_error", 0L)
                 .addString("file.input", pathInput)
                 .addString("outputPath_param", pathOutput)
                 .toJobParameters();

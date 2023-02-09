@@ -14,7 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.PlatformTransactionManager;
+
+import java.io.File;
+import java.util.List;
 
 @Configuration
 @Slf4j
@@ -49,7 +54,6 @@ public class BatchConfigBalanceErrorOnce {
     private UserTransactionClassifier userTransactionClassifier;
 
 
-
     // ----------------------------------------------------------------------------------
     // --                             STEPS & JOBS                                     --
     // ----------------------------------------------------------------------------------
@@ -66,10 +70,28 @@ public class BatchConfigBalanceErrorOnce {
                 .listener(new StepExecutionListener() {
                     @Override
                     public ExitStatus afterStep(StepExecution stepExecution) {
+
+
+
                         userTransactionClassifier.closeAllwriters();
                         log.info("------------------------------------------------------------------");
                         log.info(stepExecution.getSummary());
                         log.info("------------------------------------------------------------------");
+
+//                        stepExecution.getExecutionContext().put("counters", new List<>() {
+//                        });
+
+//                        try {
+//                            File insufficientBalanceDirectory = new File("src/main/resources/insufficient_balance_once");
+//                            long fileCount = insufficientBalanceDirectory.list().length;
+//
+//                        } catch (NullPointerException e) {
+//                            return new ExitStatus("" + e);
+//                        }
+
+//                        log.info("------------------------------------------------------------------");
+//
+//                        log.info("------------------------------------------------------------------");
                         return StepExecutionListener.super.afterStep(stepExecution);
                     }
                 })

@@ -2,13 +2,20 @@ package com.capstone.user.Processors;
 
 import com.capstone.user.Models.UserTransactionModel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.configuration.annotation.StepScope;
+import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.List;
 
 @StepScope
+//@Scope("job")
 @Component
 @Slf4j
 public class BalanceErrorOnceProcessor implements ItemProcessor<UserTransactionModel, UserTransactionModel> {
@@ -20,19 +27,27 @@ public class BalanceErrorOnceProcessor implements ItemProcessor<UserTransactionM
     // --                                  SETUP                                       --
     // ----------------------------------------------------------------------------------
 
+//    @Value("#{jobParameters['total_users']}")
+//    private static long totalUserCounter;
+
+//    @Value("#{jobParameters['usercount_with_error']}")
+//    private static long userErrorCounter;
+
     // Pair userID (as primary key) to Boolean
     // If user had insufficient balance error, Boolean = true
     // Used for parsing through multiple transactions by same user
     private final HashMap<Long, Boolean> userErrorTracker = new HashMap<>();
 
     // Counter for unique total users
-    private static long totalUserCounter = 0;
+    private static long totalUserCounter = 0L;
 
     // Counter for unique users with at least one insufficient balance error
-    private static long userErrorCounter = 0;
+    private static long userErrorCounter = 0L;
 
     // General ID counter
-    private static long transactionIdCounter = 0;
+    private static long transactionIdCounter = 0L;
+
+    private List<Long> counters;
 
     // ----------------------------------------------------------------------------------
     // --                                METHODS                                       --
@@ -50,7 +65,7 @@ public class BalanceErrorOnceProcessor implements ItemProcessor<UserTransactionM
                 userErrorTracker.put(transaction.getUserID(), false);
 
                 // Check if user transaction has insufficient balance error
-                if (transaction.getTransactionErrorCheck().equals("\"Insufficient Balance")) {
+                if (transaction.getTransactionErrorCheck().equals("\"Insufficient Balance,\"")) {
 
                     userErrorCounter++;
                     // Change user Boolean to "true" for insufficient balance check
@@ -69,7 +84,7 @@ public class BalanceErrorOnceProcessor implements ItemProcessor<UserTransactionM
             if (userErrorTracker.get(transaction.getUserID()).equals(false)) {
 
                 // Check if user transaction has insufficient balance error
-                if (transaction.getTransactionErrorCheck().equals("\"Insufficient Balance")) {
+                if (transaction.getTransactionErrorCheck().equals("\"Insufficient Balance,\"")) {
 
                     userErrorCounter++;
                     // Change user Boolean to "true" for insufficient balance check
@@ -86,5 +101,16 @@ public class BalanceErrorOnceProcessor implements ItemProcessor<UserTransactionM
             // had the insufficient balance error recorded)
             return null;
         }
+    }
+
+    public void storeCounterData(StepExecution stepExecution) {
+
+        counters.add(totalUserCounter); // Index 0
+        counters.add(userErrorCounter); // Index 1
+
+        JobExecution jobExecution = stepExecution.getJobExecution();
+        ExecutionContext jobContext = jobExecution.getExecutionContext();
+
+        counters = (List<Long>) jobContext.get("counters");
     }
 }
