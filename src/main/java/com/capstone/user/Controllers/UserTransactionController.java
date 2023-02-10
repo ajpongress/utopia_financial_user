@@ -1,6 +1,7 @@
 package com.capstone.user.Controllers;
 
 import com.capstone.user.Services.UserTransactionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,11 +10,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Slf4j
 public class UserTransactionController {
 
     // ----------------------------------------------------------------------------------
     // --                                  SETUP                                       --
     // ----------------------------------------------------------------------------------
+
+    private static String reportsPath;
 
     @Autowired
     UserTransactionService transactionServiceUser;
@@ -44,8 +48,13 @@ public class UserTransactionController {
 
     // check for insufficient balance at least once per user
     @GetMapping("/users/balance_error_once")
-    public ResponseEntity<String> balanceErrorOnceAPI(@RequestParam String source, @RequestParam String destination) {
+    public ResponseEntity<String> balanceErrorOnceAPI(@RequestParam String source, @RequestParam String destination, @RequestParam String reports_destination) {
 
-        return transactionServiceUser.balanceErrorOnce(source, destination);
+        reportsPath = reports_destination;
+        return transactionServiceUser.balanceErrorOnce(source, destination, reports_destination);
+    }
+
+    public static String getReportsPath() {
+        return reportsPath;
     }
 }

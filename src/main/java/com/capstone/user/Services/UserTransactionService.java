@@ -48,6 +48,7 @@ public class UserTransactionService {
         }
 
         return new JobParametersBuilder()
+                .addLong("time.Started", System.currentTimeMillis())
                 .addString("file.input", pathInput)
                 .addString("outputPath_param", pathOutput)
                 .toJobParameters();
@@ -62,13 +63,14 @@ public class UserTransactionService {
         }
 
         return new JobParametersBuilder()
+                .addLong("time.Started", System.currentTimeMillis())
                 .addLong("userID_param", userID)
                 .addString("file.input", pathInput)
                 .addString("outputPath_param", pathOutput)
                 .toJobParameters();
     }
 
-    private JobParameters buildJobParameters_BalanceErrorOnce(String pathInput, String pathOutput) {
+    private JobParameters buildJobParameters_BalanceErrorOnce(String pathInput, String pathOutput, String pathReports) {
 
         // Check if source file.input is valid
         File file = new File(pathInput);
@@ -77,10 +79,10 @@ public class UserTransactionService {
         }
 
         return new JobParametersBuilder()
-                //.addLong("total_users", 0L)
-                //.addLong("usercount_with_error", 0L)
+                .addLong("time.Started", System.currentTimeMillis())
                 .addString("file.input", pathInput)
                 .addString("outputPath_param", pathOutput)
+                .addString("reportPath_param", pathReports)
                 .toJobParameters();
     }
 
@@ -150,10 +152,10 @@ public class UserTransactionService {
     // ----------------------------------------------------------------------------------------------------------
 
     // insufficient balance error (at least once)
-    public ResponseEntity<String> balanceErrorOnce(String pathInput, String pathOutput) {
+    public ResponseEntity<String> balanceErrorOnce(String pathInput, String pathOutput, String pathReports) {
 
         try {
-            JobParameters jobParameters = buildJobParameters_BalanceErrorOnce(pathInput, pathOutput);
+            JobParameters jobParameters = buildJobParameters_BalanceErrorOnce(pathInput, pathOutput, pathReports);
             jobLauncher.run(batchConfigBalanceErrorOnce.job_exportFirstBalanceError(), jobParameters);
 
         } catch (BeanCreationException e) {

@@ -49,7 +49,7 @@ public class IntegrationTests_InsufficientBalance {
 
     // Hardcoded userID - matches first userID in test_input_insufficientBalance.csv source
     private long userID = 0L;
-    private String INPUT = "src/test/resources/input/test_input.csv";
+    private String INPUT = "src/test/resources/input/test_input_insufficientBalance.csv";
     private String EXPECTED_OUTPUT = "src/test/resources/output/expected_output_insufficientBalance.xml";
     private String ACTUAL_OUTPUT = "src/test/resources/output/insufficient_balance_once";
 
