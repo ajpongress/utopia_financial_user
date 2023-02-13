@@ -1,6 +1,7 @@
 package com.capstone.user.Services;
 
 import com.capstone.user.Configurations.BatchConfigAllUsers;
+import com.capstone.user.Configurations.BatchConfigBalanceErrorMany;
 import com.capstone.user.Configurations.BatchConfigBalanceErrorOnce;
 import com.capstone.user.Configurations.BatchConfigSingleUser;
 import org.springframework.batch.core.JobParameters;
@@ -39,6 +40,10 @@ public class UserTransactionService {
     @Autowired
     BatchConfigBalanceErrorOnce batchConfigBalanceErrorOnce;
 
+    @Autowired
+    BatchConfigBalanceErrorMany batchConfigBalanceErrorMany;
+
+    // Job Parameters - All Users
     private JobParameters buildJobParameters_AllUsers(String pathInput, String pathOutput) {
 
         // Check if source file.input is valid
@@ -54,6 +59,9 @@ public class UserTransactionService {
                 .toJobParameters();
     }
 
+    // ----------------------------------------------------------------------------------------------------------
+
+    // Job Parameters - Single User
     private JobParameters buildJobParameters_SingleUser(long userID, String pathInput, String pathOutput) {
 
         // Check if source file.input is valid
@@ -70,7 +78,29 @@ public class UserTransactionService {
                 .toJobParameters();
     }
 
+    // ----------------------------------------------------------------------------------------------------------
+
+    // Job Parameters - Check users for at least one insufficient balance error
     private JobParameters buildJobParameters_BalanceErrorOnce(String pathInput, String pathOutput, String pathReports) {
+
+        // Check if source file.input is valid
+        File file = new File(pathInput);
+        if (!file.exists()) {
+            throw new ItemStreamException("Requested source doesn't exist");
+        }
+
+        return new JobParametersBuilder()
+                .addLong("time.Started", System.currentTimeMillis())
+                .addString("file.input", pathInput)
+                .addString("outputPath_param", pathOutput)
+                .addString("reportPath_param", pathReports)
+                .toJobParameters();
+    }
+
+    // ----------------------------------------------------------------------------------------------------------
+
+    // Job Parameters - Check users for more than one insufficient balance error
+    private JobParameters buildJobParameters_BalanceErrorMany(String pathInput, String pathOutput, String pathReports) {
 
         // Check if source file.input is valid
         File file = new File(pathInput);
@@ -157,6 +187,33 @@ public class UserTransactionService {
         try {
             JobParameters jobParameters = buildJobParameters_BalanceErrorOnce(pathInput, pathOutput, pathReports);
             jobLauncher.run(batchConfigBalanceErrorOnce.job_exportFirstBalanceError(), jobParameters);
+
+        } catch (BeanCreationException e) {
+            return new ResponseEntity<>("Bean creation had an error. Job halted.", HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>("Requested source doesn't exist", HttpStatus.BAD_REQUEST);
+        } catch (JobExecutionAlreadyRunningException e) {
+            return new ResponseEntity<>("Job execution already running", HttpStatus.BAD_REQUEST);
+        } catch (JobRestartException e) {
+            return new ResponseEntity<>("Job restart exception", HttpStatus.BAD_REQUEST);
+        } catch (JobInstanceAlreadyCompleteException e) {
+            return new ResponseEntity<>("Job already completed", HttpStatus.BAD_REQUEST);
+        } catch (JobParametersInvalidException e) {
+            return new ResponseEntity<>("Job parameters are invalid", HttpStatus.BAD_REQUEST);
+        }
+
+        // Job successfully ran
+        return new ResponseEntity<>("Job parameters OK. Job Completed", HttpStatus.CREATED);
+    }
+
+    // ----------------------------------------------------------------------------------------------------------
+
+    // insufficient balance error (more than once)
+    public ResponseEntity<String> balanceErrorMany(String pathInput, String pathOutput, String pathReports) {
+
+        try {
+            JobParameters jobParameters = buildJobParameters_BalanceErrorMany(pathInput, pathOutput, pathReports);
+            jobLauncher.run(batchConfigBalanceErrorMany.job_exportAllBalanceErrors(), jobParameters);
 
         } catch (BeanCreationException e) {
             return new ResponseEntity<>("Bean creation had an error. Job halted.", HttpStatus.BAD_REQUEST);

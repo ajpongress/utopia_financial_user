@@ -54,6 +54,14 @@ public class UserTransactionController {
         return transactionServiceUser.balanceErrorOnce(source, destination, reports_destination);
     }
 
+    // check for insufficient balance more than once per user
+    @GetMapping("/users/balance_error_many")
+    public ResponseEntity<String> balanceErrorManyAPI(@RequestParam String source, @RequestParam String destination, @RequestParam String reports_destination) {
+
+        reportsPath = reports_destination;
+        return transactionServiceUser.balanceErrorMany(source, destination, reports_destination);
+    }
+
     public static String getReportsPath() {
         return reportsPath;
     }

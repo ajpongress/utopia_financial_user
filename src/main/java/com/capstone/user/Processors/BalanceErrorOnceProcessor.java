@@ -16,7 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 
 @StepScope
-//@Scope("job")
 @Component
 @Slf4j
 public class BalanceErrorOnceProcessor implements ItemProcessor<UserTransactionModel, UserTransactionModel> {
@@ -44,6 +43,14 @@ public class BalanceErrorOnceProcessor implements ItemProcessor<UserTransactionM
 
     // Store totalUser and userError counters in list to export to Step listener
     private List<Long> counters = new ArrayList<>();
+
+    public void clearAllTrackersAndCounters() {
+        userErrorTracker.clear();
+        totalUserCounter = 0L;
+        userErrorCounter = 0L;
+        transactionIdCounter = 0L;
+        counters.clear();
+    }
 
     // ----------------------------------------------------------------------------------
     // --                                METHODS                                       --

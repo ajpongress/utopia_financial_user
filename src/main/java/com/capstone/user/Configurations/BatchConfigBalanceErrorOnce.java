@@ -90,7 +90,7 @@ public class BatchConfigBalanceErrorOnce {
                             BufferedWriter writer = new BufferedWriter(new FileWriter(insufficientBalanceReport));
                             writer.write("Total users = " + totalUsers);
                             writer.newLine();
-                            writer.write("# of users with insufficient balance = " + usersWithInsufficientBal);
+                            writer.write("# of users with insufficient balance at least once = " + usersWithInsufficientBal);
                             writer.newLine();
                             writer.write("% of total users with insufficient balance at least once = " + percentageOfUsers);
                             writer.close();
@@ -102,11 +102,13 @@ public class BatchConfigBalanceErrorOnce {
                         // Print same data to console
                         log.info("------------------------------------------------------------------");
                         log.info("Total users = " + totalUsers);
-                        log.info("# of users with insufficient balance = " + usersWithInsufficientBal);
+                        log.info("# of users with insufficient balance at least once = " + usersWithInsufficientBal);
                         log.info("% of total users with insufficient balance at least once = " + percentageOfUsers);
                         log.info("------------------------------------------------------------------");
                         log.info(stepExecution.getSummary());
                         log.info("------------------------------------------------------------------");
+
+                        balanceErrorOnceProcessor.clearAllTrackersAndCounters();
 
                         return StepExecutionListener.super.afterStep(stepExecution);
                     }
