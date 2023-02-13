@@ -1,0 +1,12 @@
+User,CardModel,Year,Month,Day,Time,Amount,Use Chip,Merchant Name,Merchant City,Merchant State,Zip,MCC,Errors?,Is Fraud?
+0,0,2002,9,1,06:21,$134.09,Swipe Transaction,-3527213246127876953,La Verne,CA,91750.0,5300,"Insufficient Balance,",No
+0,0,2002,9,11,06:28,$162.39,Swipe Transaction,4060646732831064559,La Verne,CA,91750.0,5411,"Insufficient Balance,",No
+0,0,2002,9,11,13:17,$-99.00,Swipe Transaction,2027553650310142703,Mira Loma,CA,91752.0,5541,,No
+2,0,2009,9,26,01:56,$948.44,Online Transaction,3694722044710185708, ONLINE,,,4722,"Insufficient Balance,",No
+2,1,2016,3,23,06:58,$9.38,Swipe Transaction,4722913068560264812,Alhambra,CA,91801.0,5411,,No
+41,2,2004,3,29,14:00,$60.37,Swipe Transaction,-1288082279022882052,Corpus Christi,TX,78410.0,5499,,No
+41,2,2004,3,29,14:13,$89.00,Swipe Transaction,-1288082279022882052,Corpus Christi,TX,78410.0,5499,"Insufficient Balance,",No
+41,2,2004,3,29,14:24,$-89.00,Swipe Transaction,-1288082279022882052,Corpus Christi,TX,78410.0,5499,"Insufficient Balance,",No
+41,2,2004,3,31,12:49,$9.36,Swipe Transaction,-4500542936415012428,Corpus Christi,TX,78410.0,5814,"Insufficient Balance,",No
+41,2,2004,3,31,20:49,$179.81,Swipe Transaction,-533981832501964966,Corpus Christi,TX,78410.0,8011,,No
+123,0,2007,6,3,14:01,$84.08,Swipe Transaction,-6761066196029841443,Madison,WI,53705.0,5310,,No
