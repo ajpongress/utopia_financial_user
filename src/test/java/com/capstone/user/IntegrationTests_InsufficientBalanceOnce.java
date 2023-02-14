@@ -1,10 +1,8 @@
 package com.capstone.user;
 
 import com.capstone.user.Classifiers.UserTransactionClassifier;
-import com.capstone.user.Configurations.BatchConfigAllUsers;
 import com.capstone.user.Configurations.BatchConfigBalanceErrorOnce;
 import com.capstone.user.Models.UserTransactionModel;
-import com.capstone.user.Processors.AllUsersProcessor;
 import com.capstone.user.Processors.BalanceErrorOnceProcessor;
 import com.capstone.user.Readers.UserTransactionReaderCSV;
 import com.capstone.user.TaskExecutors.TaskExecutor;
@@ -35,7 +33,7 @@ import java.io.File;
 })
 @EnableAutoConfiguration
 
-public class IntegrationTests_InsufficientBalance {
+public class IntegrationTests_InsufficientBalanceOnce {
 
     // ----------------------------------------------------------------------------------
     // --                                  SETUP                                       --
