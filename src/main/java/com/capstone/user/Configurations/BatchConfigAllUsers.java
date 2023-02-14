@@ -69,6 +69,9 @@ public class BatchConfigAllUsers {
                         log.info("------------------------------------------------------------------");
                         log.info(stepExecution.getSummary());
                         log.info("------------------------------------------------------------------");
+
+                        allUsersProcessor.clearAllTrackersAndCounters();
+
                         return StepExecutionListener.super.afterStep(stepExecution);
                     }
                 })

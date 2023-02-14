@@ -71,6 +71,9 @@ public class BatchConfigSingleUser {
                         log.info("------------------------------------------------------------------");
                         log.info(stepExecution.getSummary());
                         log.info("------------------------------------------------------------------");
+
+                        singleUserProcessor.clearAllTrackersAndCounters();
+
                         return StepExecutionListener.super.afterStep(stepExecution);
                     }
                 })

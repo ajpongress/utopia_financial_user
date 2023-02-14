@@ -25,14 +25,12 @@ public class AllUsersProcessor implements ItemProcessor<UserTransactionModel, Us
 
     private final Faker faker = new Faker();
 
-    // Useful for additional jobs or steps
-    public void clearMap() {
-        userIdTracker.clear();
-    }
-
     private static long transactionIdCounter = 0;
 
-
+    public void clearAllTrackersAndCounters() {
+        userIdTracker.clear();
+        transactionIdCounter = 0;
+    }
 
     // ----------------------------------------------------------------------------------
     // --                                METHODS                                       --
