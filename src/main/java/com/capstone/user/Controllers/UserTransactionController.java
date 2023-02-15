@@ -19,6 +19,10 @@ public class UserTransactionController {
 
     private static String reportsPath;
 
+    public static String getReportsPath() {
+        return reportsPath;
+    }
+
     @Autowired
     UserTransactionService transactionServiceUser;
 
@@ -62,7 +66,5 @@ public class UserTransactionController {
         return transactionServiceUser.balanceErrorMany(source, destination, reports_destination);
     }
 
-    public static String getReportsPath() {
-        return reportsPath;
-    }
+
 }
