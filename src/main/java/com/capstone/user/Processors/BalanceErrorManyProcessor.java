@@ -86,6 +86,17 @@ public class BalanceErrorManyProcessor implements ItemProcessor<UserTransactionM
 
                         userErrorTracker.replace(transaction.getUserID(), 1L, 2L); // Increment Integer to 2 in Hashmap for user
                         userMultErrorCounter++;
+
+                        // Strip negative sign from MerchantID
+                        long temp_MerchantID = Math.abs(transaction.getMerchantID());
+                        transaction.setMerchantID(temp_MerchantID);
+
+                        // Strip fractional part of TransactionZip if greater than 5 characters
+                        if (transaction.getTransactionZip().length() > 5) {
+                            String[] temp_TransactionZip = transaction.getTransactionZip().split("\\.", 0);
+                            transaction.setTransactionZip(temp_TransactionZip[0]);
+                        }
+
                         // Return user transaction to write to user's transaction list
                         transactionIdCounter++;
                         transaction.setId(transactionIdCounter);
@@ -98,6 +109,16 @@ public class BalanceErrorManyProcessor implements ItemProcessor<UserTransactionM
                     // Long in Hashmap doesn't need to be incremented anymore. All future transactions
                     // by this user with a balance error will be caught here and sent to writer
                     else {
+
+                        // Strip negative sign from MerchantID
+                        long temp_MerchantID = Math.abs(transaction.getMerchantID());
+                        transaction.setMerchantID(temp_MerchantID);
+
+                        // Strip fractional part of TransactionZip if greater than 5 characters
+                        if (transaction.getTransactionZip().length() > 5) {
+                            String[] temp_TransactionZip = transaction.getTransactionZip().split("\\.", 0);
+                            transaction.setTransactionZip(temp_TransactionZip[0]);
+                        }
 
                         // Return user transaction to write to user's transaction list
                         transactionIdCounter++;

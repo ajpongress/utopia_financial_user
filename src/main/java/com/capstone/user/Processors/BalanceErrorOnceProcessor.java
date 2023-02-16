@@ -68,6 +68,17 @@ public class BalanceErrorOnceProcessor implements ItemProcessor<UserTransactionM
                     userErrorCounter++;
                     // Change user Boolean to "true" for insufficient balance check
                     userErrorTracker.put(transaction.getUserID(), true);
+
+                    // Strip negative sign from MerchantID
+                    long temp_MerchantID = Math.abs(transaction.getMerchantID());
+                    transaction.setMerchantID(temp_MerchantID);
+
+                    // Strip fractional part of TransactionZip if greater than 5 characters
+                    if (transaction.getTransactionZip().length() > 5) {
+                        String[] temp_TransactionZip = transaction.getTransactionZip().split("\\.", 0);
+                        transaction.setTransactionZip(temp_TransactionZip[0]);
+                    }
+
                     transactionIdCounter++;
                     transaction.setId(transactionIdCounter);
                     log.info(transaction.toString());
@@ -87,6 +98,17 @@ public class BalanceErrorOnceProcessor implements ItemProcessor<UserTransactionM
                     userErrorCounter++;
                     // Change user Boolean to "true" for insufficient balance check
                     userErrorTracker.put(transaction.getUserID(), true);
+
+                    // Strip negative sign from MerchantID
+                    long temp_MerchantID = Math.abs(transaction.getMerchantID());
+                    transaction.setMerchantID(temp_MerchantID);
+
+                    // Strip fractional part of TransactionZip if greater than 5 characters
+                    if (transaction.getTransactionZip().length() > 5) {
+                        String[] temp_TransactionZip = transaction.getTransactionZip().split("\\.", 0);
+                        transaction.setTransactionZip(temp_TransactionZip[0]);
+                    }
+
                     transactionIdCounter++;
                     transaction.setId(transactionIdCounter);
                     log.info(transaction.toString());
