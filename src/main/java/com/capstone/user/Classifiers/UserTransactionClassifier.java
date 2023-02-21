@@ -70,10 +70,6 @@ public class UserTransactionClassifier implements Classifier<UserTransactionMode
 
                 // Complete path for file export
                 File file = new File(outputPath + "\\" + fileName);
-//                // ================= DEBUG ====================
-//                log.info("============================================================");
-//                log.info("File Path = " + file.getAbsolutePath());
-//                log.info("============================================================");
 
                 // XML writer
                 XStreamMarshaller marshaller = new XStreamMarshaller();
