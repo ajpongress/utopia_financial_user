@@ -92,7 +92,7 @@ public class BatchConfigDerivedPayments {
                             writer.write("User " + derivedPaymentsProcessor.getUserID_from_URI() + " reports:");
                             writer.newLine();
                             writer.newLine();
-                            writer.write("Total transaction - " + totalUserTransactions);
+                            writer.write("Total transactions - " + totalUserTransactions);
                             writer.newLine();
                             writer.write("Total \"Insufficient Balance\" errors - " + totalInsufficientBal);
                             writer.newLine();
