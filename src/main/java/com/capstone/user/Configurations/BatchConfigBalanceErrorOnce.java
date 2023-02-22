@@ -83,7 +83,7 @@ public class BatchConfigBalanceErrorOnce {
 
                         // Create reports file using reports file path from Controller API call
                         String filePath = UserTransactionController.getReportsPath();
-                        File insufficientBalanceReport = new File(filePath);
+                        File insufficientBalanceReport = new File(filePath + "/reports");
 
                         // Write relevant data to reports file
                         try {

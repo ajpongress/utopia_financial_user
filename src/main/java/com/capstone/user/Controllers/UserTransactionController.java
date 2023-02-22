@@ -18,13 +18,9 @@ public class UserTransactionController {
     // ----------------------------------------------------------------------------------
 
     private static String reportsPath;
-    private static String destinationPath;
 
     public static String getReportsPath() {
         return reportsPath;
-    }
-    public static String getDestinationPath() {
-        return destinationPath;
     }
 
     @Autowired
@@ -75,7 +71,6 @@ public class UserTransactionController {
     public ResponseEntity<String> derivedPaymentsAPI(@PathVariable long userID, @RequestParam String source, @RequestParam String destination, @RequestParam String reports_destination) {
 
         reportsPath = reports_destination;
-        destinationPath = destination;
         return transactionServiceUser.derivedPayments(userID, source, destination);
     }
 }

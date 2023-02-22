@@ -79,7 +79,7 @@ public class BatchConfigDerivedPayments {
 
                         // Create reports file using reports file path from Controller API call
                         String filePath = UserTransactionController.getReportsPath();
-                        File derivedPaymentsReport = new File(filePath);
+                        File derivedPaymentsReport = new File(filePath + "/user_" + derivedPaymentsProcessor.getUserID_from_URI() + "_reports");
 
                         long totalUserTransactions = derivedPaymentsProcessor.getTotalTransactionCounter();
                         long totalInsufficientBal = derivedPaymentsProcessor.getInsufficientBalCounter();
