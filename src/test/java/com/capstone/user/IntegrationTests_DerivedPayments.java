@@ -3,6 +3,7 @@ package com.capstone.user;
 import com.capstone.user.Classifiers.UserTransactionClassifier;
 import com.capstone.user.Configurations.BatchConfigDerivedPayments;
 import com.capstone.user.Models.UserTransactionModel;
+import com.capstone.user.PathHandlers.ReportsPathHandler;
 import com.capstone.user.Processors.DerivedPaymentsProcessor;
 import com.capstone.user.Readers.UserTransactionReaderCSV;
 import com.capstone.user.Writers.UserTransactionCompositeWriter;
@@ -35,6 +36,7 @@ import java.io.File;
         UserTransactionReaderCSV.class,
         DerivedPaymentsProcessor.class,
         UserTransactionCompositeWriter.class,
+        ReportsPathHandler.class
         //TaskExecutor.class
 })
 @EnableAutoConfiguration
@@ -59,6 +61,10 @@ public class IntegrationTests_DerivedPayments {
 
     private String INPUT = "src/test/resources/input/test_input_insufficientBalanceMany.csv";
 
+//    private String REPORTS_OUTPUT = "src/test/resources/output/derived_payments/user_" + userID + "_reports";
+
+    private String REPORTS_OUTPUT = "src/test/resources/output/derived_payments";
+
     private String ACTUAL_OUTPUT = "src/test/resources/output/derived_payments";
 
     @AfterEach
@@ -72,6 +78,7 @@ public class IntegrationTests_DerivedPayments {
                 .addLong("userID_param", userID)
                 .addString("file.input", INPUT)
                 .addString("outputPath_param", ACTUAL_OUTPUT)
+                .addString("reportsPath_param", REPORTS_OUTPUT)
                 .toJobParameters();
     }
 
