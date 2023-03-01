@@ -4,6 +4,7 @@ import com.capstone.user.Classifiers.UserTransactionClassifier;
 import com.capstone.user.Controllers.UserTransactionController;
 import com.capstone.user.Listeners.CustomChunkListener;
 import com.capstone.user.Models.UserTransactionModel;
+import com.capstone.user.PathHandlers.ReportsPathHandler;
 import com.capstone.user.Processors.DerivedPaymentsProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
@@ -55,6 +56,9 @@ public class BatchConfigDerivedPayments {
     @Autowired
     private UserTransactionClassifier userTransactionClassifier;
 
+    @Autowired
+    private ReportsPathHandler reportsPathHandler;
+
 
 
     // ----------------------------------------------------------------------------------
@@ -78,7 +82,8 @@ public class BatchConfigDerivedPayments {
                         userTransactionClassifier.closeAllwriters();
 
                         // Create reports file using reports file path from Controller API call
-                        String filePath = UserTransactionController.getReportsPath();
+//                        String filePath = UserTransactionController.getReportsPath();
+                        String filePath = reportsPathHandler.getReportsPath();
                         File derivedPaymentsReport = new File(filePath + "/user_" + derivedPaymentsProcessor.getUserID_from_URI() + "_reports");
 
                         long totalUserTransactions = derivedPaymentsProcessor.getTotalTransactionCounter();

@@ -71,6 +71,6 @@ public class UserTransactionController {
     public ResponseEntity<String> derivedPaymentsAPI(@PathVariable long userID, @RequestParam String source, @RequestParam String destination, @RequestParam String reports_destination) {
 
         reportsPath = reports_destination;
-        return transactionServiceUser.derivedPayments(userID, source, destination);
+        return transactionServiceUser.derivedPayments(userID, source, destination, reports_destination);
     }
 }

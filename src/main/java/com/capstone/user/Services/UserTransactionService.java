@@ -93,11 +93,29 @@ public class UserTransactionService {
                 .addLong("time.Started", System.currentTimeMillis())
                 .addString("file.input", pathInput)
                 .addString("outputPath_param", pathOutput)
-                .addString("reportPath_param", pathReports)
+                .addString("reportsPath_param", pathReports)
                 .toJobParameters();
     }
 
+    // ----------------------------------------------------------------------------------------------------------
 
+    // Job Parameters - Derived payments
+    private JobParameters buildJobParameters_SingleUserWithReports(long userID, String pathInput, String pathOutput, String pathReports) {
+
+        // Check if source file.input is valid
+        File file = new File(pathInput);
+        if (!file.exists()) {
+            throw new ItemStreamException("Requested source doesn't exist");
+        }
+
+        return new JobParametersBuilder()
+                .addLong("time.Started", System.currentTimeMillis())
+                .addLong("userID_param", userID)
+                .addString("file.input", pathInput)
+                .addString("outputPath_param", pathOutput)
+                .addString("reportsPath_param", pathReports)
+                .toJobParameters();
+    }
 
     // ----------------------------------------------------------------------------------
     // --                                METHODS                                       --
@@ -219,10 +237,10 @@ public class UserTransactionService {
     // ----------------------------------------------------------------------------------------------------------
 
     // derived user payments
-    public ResponseEntity<String> derivedPayments(long userID, String pathInput, String pathOutput) {
+    public ResponseEntity<String> derivedPayments(long userID, String pathInput, String pathOutput, String reports_destination) {
 
         try {
-            JobParameters jobParameters = buildJobParameters_SingleUser(userID, pathInput, pathOutput);
+            JobParameters jobParameters = buildJobParameters_SingleUserWithReports(userID, pathInput, pathOutput, reports_destination);
             jobLauncher.run(batchConfigDerivedPayments.job_exportUserDerivedPayments(), jobParameters);
 
         } catch (BeanCreationException e) {
