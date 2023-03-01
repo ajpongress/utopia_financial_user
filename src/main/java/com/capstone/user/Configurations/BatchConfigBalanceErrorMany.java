@@ -3,6 +3,7 @@ package com.capstone.user.Configurations;
 import com.capstone.user.Classifiers.UserTransactionClassifier;
 import com.capstone.user.Controllers.UserTransactionController;
 import com.capstone.user.Models.UserTransactionModel;
+import com.capstone.user.PathHandlers.ReportsPathHandler;
 import com.capstone.user.Processors.BalanceErrorManyProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.*;
@@ -54,6 +55,9 @@ public class BatchConfigBalanceErrorMany {
     @Autowired
     private UserTransactionClassifier userTransactionClassifier;
 
+    @Autowired
+    private ReportsPathHandler reportsPathHandler;
+
 
 
     // ----------------------------------------------------------------------------------
@@ -84,7 +88,8 @@ public class BatchConfigBalanceErrorMany {
                         float percentageOfUsers = usersWithMultInsufficientBalFloat / totalUsersFloat;
 
                         // Create reports file using reports file path from Controller API call
-                        String filePath = UserTransactionController.getReportsPath();
+//                        String filePath = UserTransactionController.getReportsPath();
+                        String filePath = reportsPathHandler.getReportsPath();
                         File multInsufficientBalanceReport = new File(filePath + "/reports");
 
                         // Write relevant data to reports file
