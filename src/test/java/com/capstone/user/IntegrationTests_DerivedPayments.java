@@ -59,9 +59,6 @@ public class IntegrationTests_DerivedPayments {
 
     private String INPUT = "src/test/resources/input/test_input_insufficientBalanceMany.csv";
 
-    // Can't create expected output file due to random name generation inserted into actual XML output
-    //private String EXPECTED_OUTPUT = "src/test/resources/output/expected_output_DerivedPayments.xml";
-
     private String ACTUAL_OUTPUT = "src/test/resources/output/derived_payments";
 
     @AfterEach
